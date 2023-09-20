@@ -60,6 +60,7 @@ let posImg = [];
 let aciertos = 0;
 let intentos = 0;
 let tiempo = 60;
+let tabla = d.querySelector(".table_estadisticas tbody")
 let mostrarAciertos = d.querySelector(".aciertos");
 let mostrarIntentos = d.querySelector(".intentos");
 let mostrarTiempo = d.querySelector(".tiempos");
@@ -72,6 +73,7 @@ let tiempoTrancurrido;
 
 /*-------------------------------------TALLER RESUELTO--------------------------------------------------*/
 //Agregado Nuevo
+
 let intentosTotales = 0;
 let tiempoTotal = 0;
 
@@ -84,9 +86,47 @@ let DatosUsuario = [];
 //     DatosUsuario.push[{nombre: NombreUsuario}];
 // }
 
-localStorage.setItem('datosUsuario', JSON.stringify(DatosUsuario));
+
 
 console.log(DatosUsuario)
+
+let datosGuardados = localStorage.getItem("DatosUsuario")
+
+/*const jugadorExistente = datosGuardados.find((jugador) => jugador.nombre === nombre);
+
+if (jugadorExistente) {
+    // Si el jugador ya existe, actualizar sus datos
+    jugadorExistente.tiempo = tiempoTotal;
+    jugadorExistente.intentos = intentosTotales;
+} else {
+    // Si el jugador no existe, agregar un nuevo registro
+    const jugador = {
+        nombre: nombre,
+        tiempo: tiempoTotal,
+        intentos: intentosTotales,
+    };
+    datosGuardados.push(jugador);
+}*/
+
+if (datosGuardados){
+    let datos = localStorage.getItem("DatosUsuario")
+    const datosJugador = JSON.parse(datos);
+    datosJugador.forEach((DatosUsuario, i) => {
+        let mostarNombre = d.querySelector(".player")
+        mostarNombre.textContent = DatosUsuario.nombre;
+        let fila = document.createElement("tr");
+        fila.innerHTML = `
+            <td>${i + 1}</td>
+            <td>${DatosUsuario.nombre}</td>
+            <td>${DatosUsuario.tiempoTotal}</td>
+            <td>${DatosUsuario.intentosTotales}</td>
+        `;
+        tabla.appendChild(fila);
+    });
+}
+
+
+
 /*-------------------------------------------------HASTA AQUI-------------------------------------------*/
 // let soundLoser = new Audio("sonido/loser.mp3");
 
@@ -239,11 +279,13 @@ function compararImg(){
         quitarImagenes();
         juegoActivo = false;
 
+
+        //Para Guardar Datos en Local
         DatosUsuario.push({
             intentosTotales: intentosTotales,
             tiempoTotal: tiempoTotal,
         })
-
+        localStorage.setItem('DatosUsuario', JSON.stringify(DatosUsuario));
     }
     
     //quitar imagenes del tablero
